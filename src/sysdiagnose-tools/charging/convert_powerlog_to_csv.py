@@ -14,6 +14,7 @@ def load_powerlog_from_tarball(tarball_path:str) -> str:
     tar_fileobj = io.BytesIO()
     tarball_name = tarball_path.split("/")[-1][:-len('.tar.gz')]
     with tarfile.open(name=tarball_path, mode='r') as tar:
+        # Slowest part is searching for the right file.. Might provide an option to store this in /tmp
         for member in tar.getmembers():
             if f"{tarball_name}/logs/powerlogs/powerlog_" in member.name and ".plsql" in member.name.lower():
                 d = tar.extractfile(member).read()
