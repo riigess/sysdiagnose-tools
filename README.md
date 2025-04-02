@@ -2,7 +2,7 @@
 
 Tools that you can use to explore a sysdiagnose on your Mac
 
-[![Python Tests (Ubuntu)](https://github.com/riigess/sysdiagnose-tools/actions/workflows/main.yml/badge.svg?branch=main&event=push)](https://github.com/riigess/sysdiagnose-tools/actions/workflows/main.yml)
+[![Ubuntu Testing](https://github.com/riigess/sysdiagnose-tools/actions/workflows/ubuntu-tests.yml/badge.svg)](https://github.com/riigess/sysdiagnose-tools/actions/workflows/ubuntu-tests.yml)
 
 ## Sysdiagnose
 
