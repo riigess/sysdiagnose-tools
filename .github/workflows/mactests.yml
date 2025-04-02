@@ -12,7 +12,12 @@ jobs:
             # Python 3.13.1 pre-installed (https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md)
             - name: Install dependencies
               run: |
+                  python3.13 -m venv .venv
+                  source .venv/bin/activate
                   python3.13 -m pip install --upgrade pip
                   python3.13 -m pip install pytest
+            # Does the following chain with the prior action? (I hope so)
             - name: Run tests with pytest
-              run: pytest
+              run: |
+                  source .venv/bin/activate
+                  pytest
