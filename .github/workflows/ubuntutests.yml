@@ -12,7 +12,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: Install Python 3
+            - name: Install Python 3 #3.12.3 is installed by default (https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
               uses: actions/setup-python@v1
               with:
                   python-version: 3.11.11
