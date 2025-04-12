@@ -9,7 +9,7 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: self-hosted
         steps:
             - uses: actions/checkout@v2
             - name: Install Python 3 #3.12.3 is installed by default (https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
