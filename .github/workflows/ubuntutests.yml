@@ -13,9 +13,9 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: Install Python 3 #3.12.3 is installed by default (https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
-              uses: actions/setup-python@v1
+              uses: actions/setup-python@v2
               with:
-                  python-version: 3.11.11
+                  python-version: 3.12.3
             - name: Install dependencies
               run: |
                   python3 -m pip install --upgrade pip
