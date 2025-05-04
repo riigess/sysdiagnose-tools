@@ -12,10 +12,16 @@ jobs:
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v2
-            - name: Install Python 3 #3.12.3 is installed by default (https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
-              uses: actions/setup-python@v5
-              with:
-                  python-version: 3.12
+            - name: Install Python 3.12.10 (shell)
+              run: |
+                  export version="3.12.10"
+                  curl "https://www.python.org/ftp/python/$version/Python-$version.tar.xz" -o Python-$version.tar.xz
+                  tar -xJf ./Python-3.12.10.tar.xz
+                  cd Python-3.12.10
+                  sudo apt install build-essential checkinstall libreadline-dev libncursesw5-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev liblzma-dev libffi-dev
+                  ./configure --enable-optimizations
+                  make -j$(nproc --all)
+                  sudo make install
             - name: Install dependencies
               run: |
                   python3 -m pip install --upgrade pip
