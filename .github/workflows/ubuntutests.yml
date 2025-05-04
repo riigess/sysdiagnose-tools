@@ -29,32 +29,42 @@ jobs:
                   echo "Current working directory is: $(pwd)"
                   echo "Current PATH is: $PATH"
                   echo "Current git version is: $(git --version)"
+            - name: Check Python 3.12 available
+              id: python312available
+              run: |
+                  if [[ -z $(which python3.12 | grep "/") ]]; then
+                    exit -1
+                  fi
             - name: Install Python 3.12.10 (shell)
+              if: ${{ failure() && steps.python312available.outcome == 'failure'}}
               run: |
-                  if [[ -z $(which python3.12) ]]; then
-                    export version="3.12.10"
-                    export proj_name="sysdiagnose-tools"
-                    curl "https://www.python.org/ftp/python/$version/Python-$version.tar.xz" -o Python-$version.tar.xz
-                    tar -xJf ./Python-3.12.10.tar.xz
-                    cd Python-3.12.10
-                    sudo apt install build-essential checkinstall libreadline-dev libncursesw5-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev liblzma-dev libffi-dev
-                    ./configure --enable-optimizations
-                    make -j$(nproc --all)
-                    sudo make install
-                    which python3.12
-                    echo "$(which python3.12)" >> $GITHUB_PATH
-                    if [[ -n $(ls ~/actions-runner/_work/$proj_name/$proj_name/ | grep "Python-$version") ]]; then
-                      cd ~/actions-runner/_work/$proj_name/$proj_name
-                      sudo rm -rf Python-$version Python-$version.tar.xz
-                    fi
+                  export version="3.12.10"
+                  export proj_name="sysdiagnose-tools"
+                  curl "https://www.python.org/ftp/python/$version/Python-$version.tar.xz" -o Python-$version.tar.xz
+                  tar -xJf ./Python-3.12.10.tar.xz
+                  cd Python-3.12.10
+                  sudo apt install build-essential checkinstall libreadline-dev libncursesw5-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev liblzma-dev libffi-dev
+                  ./configure --enable-optimizations
+                  make -j$(nproc --all)
+                  sudo make install
+                  which python3.12
+                  echo "$(which python3.12)" >> $GITHUB_PATH
+                  if [[ -n $(ls ~/actions-runner/_work/$proj_name/$proj_name/ | grep "Python-$version") ]]; then
+                    cd ~/actions-runner/_work/$proj_name/$proj_name
+                    sudo rm -rf Python-$version Python-$version.tar.xz
                   fi
+            - name: Check pip availability
+              continue-on-error: true
+              id: pipavailable
+              run: |
+                if [[ -z $(which pip | grep "/") ]]; then
+                  exit -1
+                fi
             - name: Install pip
+              if: ${{ failure() && steps.pipavailable.outcome == 'failure' }}
               run: |
-                  echo "GitHub Path: $GITHUB_PATH"
-                  if [[ -z $(which pip | grep "/") ]]; then
-                    curl -sSL "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py
-                    sudo python3.12 ./get-pip.py setuptools wheel
-                  fi
+                  curl -sSL "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py
+                  sudo python3.12 ./get-pip.py setuptools wheel
             - name: Install dependencies and run tests
               run: |
                   echo "GitHub Path: $GITHUB_PATH"
