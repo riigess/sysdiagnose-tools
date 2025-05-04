@@ -19,6 +19,8 @@ jobs:
             - name: Install dependencies
               run: |
                   python3 -m pip install --upgrade pip
+                  python3 -m venv .venv
+                  source .venv/bin/activate
                   pip3 install pytest
-            - name: Run tests with pytest
+            - name: Run tests (using pytest)
               run: pytest
