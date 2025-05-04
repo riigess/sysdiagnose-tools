@@ -47,11 +47,10 @@ jobs:
                     curl -sSL "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py
                     sudo python3.12 ./get-pip.py setuptools wheel
                   fi
-            - name: Install sysdiganose-tools dependencies
+            - name: Install dependencies and run tests
               run: |
                   python3.12 -m pip install --upgrade pip
                   python3.12 -m venv .venv
                   source .venv/bin/activate
                   python3.12 -m pip install pytest
-            - name: Run tests (using pytest)
-              run: pytest
+                  pytest
