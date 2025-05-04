@@ -17,20 +17,27 @@ jobs:
               run: |
                   which python3
                   python3 --version
+                  if [[ -n $(which python3.12 | grep "/") ]]; then
+                    echo "Has $(python3.12 --version) for script usage"
+                  fi
             - name: Install Python 3.12.10 (shell)
               run: |
-                  export version="3.12.10"
-                  curl "https://www.python.org/ftp/python/$version/Python-$version.tar.xz" -o Python-$version.tar.xz
-                  tar -xJf ./Python-3.12.10.tar.xz
-                  cd Python-3.12.10
-                  sudo apt install build-essential checkinstall libreadline-dev libncursesw5-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev liblzma-dev libffi-dev
-                  ./configure --enable-optimizations
-                  make -j$(nproc --all)
-                  sudo make install
+                  if [[ -z $(which python3.12) ]]; then
+                    export version="3.12.10"
+                    curl "https://www.python.org/ftp/python/$version/Python-$version.tar.xz" -o Python-$version.tar.xz
+                    tar -xJf ./Python-3.12.10.tar.xz
+                    cd Python-3.12.10
+                    sudo apt install build-essential checkinstall libreadline-dev libncursesw5-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libssl-dev liblzma-dev libffi-dev
+                    ./configure --enable-optimizations
+                    make -j$(nproc --all)
+                    sudo make install
+                  fi
             - name: Install pip
               run: |
-                  curl -sSL "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py
-                  sudo python3.12 ./get-pip.py setuptools wheel
+                  if [[ -z $(which pip | grep "/") ]]; then
+                    curl -sSL "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py
+                    sudo python3.12 ./get-pip.py setuptools wheel
+                  fi
             - name: Install sysdiganose-tools dependencies
               run: |
                   python3.12 -m pip install --upgrade pip
