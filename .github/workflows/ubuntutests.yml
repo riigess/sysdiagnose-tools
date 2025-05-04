@@ -35,6 +35,7 @@ jobs:
                     ./configure --enable-optimizations
                     make -j$(nproc --all)
                     sudo make install
+                    which python3.12
                     echo "$(which python3.12)" >> $GITHUB_PATH
                     if [[ -n $(ls ~/actions-runner/_work/$proj_name/$proj_name/ | grep "Python-$version") ]]; then
                       cd ~/actions-runner/_work/$proj_name/$proj_name
@@ -43,12 +44,14 @@ jobs:
                   fi
             - name: Install pip
               run: |
+                  echo "GitHub Path: $GITHUB_PATH"
                   if [[ -z $(which pip | grep "/") ]]; then
                     curl -sSL "https://bootstrap.pypa.io/get-pip.py" -o get-pip.py
                     sudo python3.12 ./get-pip.py setuptools wheel
                   fi
             - name: Install dependencies and run tests
               run: |
+                  echo "GitHub Path: $GITHUB_PATH"
                   python3.12 -m pip install --upgrade pip
                   python3.12 -m venv .venv
                   source .venv/bin/activate
