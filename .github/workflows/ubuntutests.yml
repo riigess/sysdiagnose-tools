@@ -20,10 +20,12 @@ jobs:
                   if [[ -n $(which python3.12 | grep "/") ]]; then
                     echo "Has $(python3.12 --version) for script usage"
                   fi
+                  echo "Current working directory is: $(pwd)"
             - name: Install Python 3.12.10 (shell)
               run: |
                   if [[ -z $(which python3.12) ]]; then
                     export version="3.12.10"
+                    export proj_name="sysdiagnose-tools"
                     curl "https://www.python.org/ftp/python/$version/Python-$version.tar.xz" -o Python-$version.tar.xz
                     tar -xJf ./Python-3.12.10.tar.xz
                     cd Python-3.12.10
@@ -31,6 +33,10 @@ jobs:
                     ./configure --enable-optimizations
                     make -j$(nproc --all)
                     sudo make install
+                    if [[ -n $(ls ~/actions-runner/_work/$proj_name/$proj_name/ | grep "Python-$version") ]]; then
+                      cd ~/actions-runner/_work/$proj_name/$proj_name
+                      sudo rm -rf Python-$version Python-$version.tar.xz
+                    fi
                   fi
             - name: Install pip
               run: |
