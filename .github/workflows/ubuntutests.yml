@@ -15,10 +15,12 @@ jobs:
             - name: Dump existing Python version
               continue-on-error: true
               run: |
-                  which python3
-                  python3 --version
-                  if [[ -n $(which python3.12 | grep "/") ]]; then
+                  if [[ -n $(which python3 | grep "/") ]]; then
+                    which python3
                     echo "Has $(python3.12 --version) for script usage"
+                  fi
+                  if [[ -z $(which python3 | grep "/") ]]; then
+                    echo "No version of Python currently installed."
                   fi
                   echo "Current working directory is: $(pwd)"
             - name: Install Python 3.12.10 (shell)
@@ -33,6 +35,7 @@ jobs:
                     ./configure --enable-optimizations
                     make -j$(nproc --all)
                     sudo make install
+                    echo "$(which python3.12)" >> $GITHUB_PATH
                     if [[ -n $(ls ~/actions-runner/_work/$proj_name/$proj_name/ | grep "Python-$version") ]]; then
                       cd ~/actions-runner/_work/$proj_name/$proj_name
                       sudo rm -rf Python-$version Python-$version.tar.xz
