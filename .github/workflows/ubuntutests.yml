@@ -7,12 +7,15 @@ on:
     #     branches:
     #         - main
 
+env:
+    GITHUB_PATH: "/usr/local/bin/"
+
 jobs:
     build:
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v2
-            - name: Dump existing Python version
+            - name: Dump existing Python version and current PATH
               continue-on-error: true
               run: |
                   if [[ -n $(which python3 | grep "/") ]]; then
@@ -23,6 +26,7 @@ jobs:
                     echo "No version of Python currently installed."
                   fi
                   echo "Current working directory is: $(pwd)"
+                  echo "Current PATH is: $PATH"
             - name: Install Python 3.12.10 (shell)
               run: |
                   if [[ -z $(which python3.12) ]]; then
