@@ -9,7 +9,7 @@ on:
 
 env:
     # GITHUB_PATH: "/usr/local/bin/"
-    PATH: "$PATH:/usr/local/bin/"
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games"
 
 jobs:
     build:
@@ -28,6 +28,7 @@ jobs:
                   fi
                   echo "Current working directory is: $(pwd)"
                   echo "Current PATH is: $PATH"
+                  echo "Current git version is: $(git --version)"
             - name: Install Python 3.12.10 (shell)
               run: |
                   if [[ -z $(which python3.12) ]]; then
